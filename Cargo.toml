@@ -1,0 +1,11 @@
+[package]
+name = "mtg_gui"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+home = "0.5.3"
+json = "0.12.4"
+macroquad = "0.3.23"
