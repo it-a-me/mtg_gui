@@ -1,6 +1,7 @@
 use macroquad::prelude::*;
 mod state;
 mod useful_structs;
+mod data;
 
 #[macroquad::main("mtg_gui")]
 async fn main() {
