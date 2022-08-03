@@ -5,18 +5,17 @@ pub struct Menu {
     options: Vec<crate::useful_structs::Text>,
     position: usize,
     last_mouse_pos: Vec2,
-    requested_state:Option<u8>
 }
 impl Menu {
-    fn menu_action(&mut self) {
+    fn menu_action(&mut self) -> Option<u8> {
         match self.position {
-            0 => {self.requested_state = Some(1);}
-            1 => {println!("clicked #2");}
-            2 => {panic!();}
-            _ => {
-                panic!()
-            }
+            0 => return Some(2),
+            1 => println!("clicked #2"),
+            2 => crate::data::refresh_data(crate::data::find_data()),
+            3 => return Some(0),
+            _ => panic!(),
         }
+        None
     }
 }
 fn is_inside(x1: isize, y1: isize, x2: isize, y2: isize, width: isize, height: isize) -> bool {

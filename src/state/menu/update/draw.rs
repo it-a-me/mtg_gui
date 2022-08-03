@@ -2,6 +2,7 @@ use super::Menu;
 use macroquad::prelude::*;
 impl Menu {
     pub(super) fn draw(&mut self) {
+        clear_background(PINK);
         for (i, option) in self.options.iter_mut().enumerate() {
             if i == self.position {
                 option.draw_alt(Some(BLUE), None);

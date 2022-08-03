@@ -3,7 +3,7 @@ use crate::useful_structs::*;
 use macroquad::prelude::*;
 impl Menu {
     pub fn new() -> Self {
-        let options_strings = ["New Deck", "Load Deck", "Quit"];
+        let options_strings = ["New Deck", "Load Deck", "Refresh Data", "Quit"];
         let mut  options = Vec::new();
         for (i, option_str) in options_strings.into_iter().enumerate() {
             options.push(Text::new(
@@ -19,7 +19,6 @@ impl Menu {
             options,
             position: 0,
             last_mouse_pos: Vec2::from(mouse_position()),
-            requested_state: None,
         }
     }
 }

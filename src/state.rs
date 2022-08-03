@@ -4,21 +4,21 @@ pub fn init() -> State {
     State::Menu(menu::Menu::new())
 }
 
-pub async fn update(state: State, dt: f32) -> State {
-    let mut state = state;
-    if let Some(change) = match &mut state {
+pub async fn update(mut state: State) -> Option<State> {
+    if let Some(exit_code) = match &mut state {
         State::Menu(menu) => menu.update().await,
         State::Builder(builder) => builder.update().await,
     } {
-        state = match change {
-            0=>State::Menu(menu::Menu::new()),
-            1=>State::Builder(builder::Builder::new()),
-            _=>{panic!();}
-
-        }
-
+        return match exit_code {
+            0 => None,
+            1 => Some(State::Menu(menu::Menu::new())),
+            2 => Some(State::Builder(builder::Builder::new())),
+            _ => {
+                panic!();
+            }
+        };
     }
-    state
+    Some(state)
 }
 
 pub enum State {

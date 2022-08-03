@@ -1,14 +1,17 @@
 use macroquad::prelude::*;
+mod data;
 mod state;
 mod useful_structs;
-mod data;
 
 #[macroquad::main("mtg_gui")]
 async fn main() {
     let mut state = state::init();
     loop {
-        clear_background(PINK);
-        state = state::update(state, get_frame_time()).await;
+        if let Some(s) = state::update(state).await {
+            state = s
+        } else {
+            break;
+        }
         next_frame().await
     }
 }

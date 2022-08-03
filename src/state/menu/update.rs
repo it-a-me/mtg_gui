@@ -1,11 +1,11 @@
 use super::Menu;
-use macroquad::prelude::*;
 use crate::useful_structs::*;
+use macroquad::prelude::*;
 mod draw;
 impl Menu {
     pub async fn update(&mut self) -> Option<u8> {
-        if is_mouse_button_released(MouseButton::Left) || is_key_released(KeyCode::Enter) {
-            self.menu_action();
+        if is_key_released(KeyCode::Enter) {
+            return self.menu_action();
         }
 
         if is_key_released(KeyCode::J) || is_key_released(KeyCode::Down) {
@@ -22,14 +22,17 @@ impl Menu {
         let mouse_pos = Vec2::from(mouse_position());
         if mouse_pos != self.last_mouse_pos {
             for (i, option) in self.options.iter_mut().enumerate() {
-                if option.contains_point(mouse_pos){
+                if option.contains_point(mouse_pos) {
                     self.position = i;
                     break;
                 }
             }
         }
+        if is_mouse_button_pressed(MouseButton::Left) && self.options[self.position].contains_point(mouse_pos) {
+            return self.menu_action();
+        }
         self.last_mouse_pos = mouse_pos;
-        self.requested_state
+        None
     }
 }
 
@@ -54,11 +57,16 @@ impl Rect {
             && coords.x < self.x + self.width
             && coords.y > self.y
             && coords.y < self.y + self.height;
-        if r {println!("{}, {}",  r, std::time::UNIX_EPOCH.elapsed().unwrap().as_nanos());}
+        if r {
+            println!(
+                "{}, {}",
+                r,
+                std::time::UNIX_EPOCH.elapsed().unwrap().as_nanos()
+            );
+        }
         r
     }
-    fn draw(&self, color:Color) {
+    fn draw(&self, color: Color) {
         draw_rectangle(self.x, self.y, self.width, self.height, color);
-
     }
 }
