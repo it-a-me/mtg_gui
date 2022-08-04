@@ -1,0 +1,50 @@
+use json::JsonValue;
+
+pub struct Card {
+    name: String,
+    id: String,
+    image_uris:ImageUris, 
+    mana_cost: String,
+    cmc: u8,
+    types: Vec<String>,
+    oracle_text: String,
+    legalities: Legalities,
+    prices:Prices
+}
+pub struct ImageUris {
+    small:String,
+    normal:String,
+    large:String,
+    png:String,
+    art_crop:String,
+    border_crop:String,
+  }
+pub struct Legalities {
+    standard: bool,
+    future: bool,
+    historic: bool,
+    gladiator: bool,
+    pioneer: bool,
+    explorer: bool,
+    modern: bool,
+    legacy: bool,
+    pauper: bool,
+    vintage: bool,
+    penny: bool,
+    commander: bool,
+    brawl: bool,
+    historicbrawl: bool,
+    alchemy: bool,
+    paupercommander: bool,
+    duel: bool,
+    oldschool: bool,
+    premodern: bool,
+}
+pub struct Prices {
+    usd: f32,
+    usd_foil: f32,
+    usd_etched: f32,
+    eur: f32,
+    eur_foil: f32,
+    tix: f32,
+}

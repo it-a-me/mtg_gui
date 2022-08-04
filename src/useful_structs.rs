@@ -1,4 +1,5 @@
 mod text;
+pub mod card;
 #[derive(Clone)]
 pub struct Text {
     text: String,

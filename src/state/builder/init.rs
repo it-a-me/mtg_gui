@@ -1,4 +1,4 @@
-use crate::data::find_data;
+use crate::data::load::find_data;
 impl super::Builder {
     pub fn new() -> Self {
         let deck = ["tayam", "black lotus", "cardy"]

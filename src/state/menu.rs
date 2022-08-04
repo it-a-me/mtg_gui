@@ -11,7 +11,7 @@ impl Menu {
         match self.position {
             0 => return Some(2),
             1 => println!("clicked #2"),
-            2 => crate::data::refresh_data(crate::data::find_data()),
+            2 => crate::data::refresh_data(crate::data::load::find_data()),
             3 => return Some(0),
             _ => panic!(),
         }
