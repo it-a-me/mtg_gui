@@ -1,6 +1,8 @@
+#![allow(dead_code)]
 use json::JsonValue;
-use std::collections::HashMap;
-#[derive(Debug)]
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize)]
 pub struct Card {
     name: String,
     id: String,
@@ -13,35 +15,33 @@ pub struct Card {
     usd: Option<f32>,
 }
 #[derive(Debug)]
-pub enum CardParseError {
-    NameErr,
-    IdErr,
-    ManaCostErr,
-    CmcErr,
-    TypeErr,
-    OracleTextErr,
-    LegalityErr,
-    PriceErr,
+pub enum ParseError {
+    Name,
+    Id,
+    ManaCost,
+    Cmc,
+    Type,
+    OracleText,
+    Legality,
+    Price,
 }
 impl Card {
-    pub fn new(json: &JsonValue) -> Result<Self, CardParseError> {
-        let name: Result<&str, CardParseError> =
-            json["name"].as_str().ok_or(CardParseError::NameErr);
-        let id = json["id"].as_str().ok_or(CardParseError::IdErr);
-        let image_uri = ImageUris::new(&json["image_uris"]).ok_or(CardParseError::NameErr);
+    pub fn new(json: &JsonValue) -> Result<Self, ParseError> {
+        let name: Result<&str, ParseError> =
+            json["name"].as_str().ok_or(ParseError::Name);
+        let id = json["id"].as_str().ok_or(ParseError::Id);
+        let image_uri = ImageUris::new(&json["image_uris"]).ok_or(ParseError::Name);
         let mana_cost = json["mana_cost"]
             .as_str()
-            .ok_or(CardParseError::ManaCostErr);
+            .ok_or(ParseError::ManaCost);
+        #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
         let cmc = json["cmc"].as_f32().unwrap() as u8;
-        let types = json["type_line"].as_str().ok_or(CardParseError::TypeErr);
+        let types = json["type_line"].as_str().ok_or(ParseError::Type);
         let oracle_text = json["oracle_text"]
             .as_str()
-            .ok_or(CardParseError::OracleTextErr);
-        let formats = Formats::new(&json["legalities"]).ok_or(CardParseError::LegalityErr);
-        let usd = match json["prices"]["usd"].as_str() {
-            Some(v) => Some(v.parse::<f32>().expect("usd is invalid for a float")),
-            None => None,
-        };
+            .ok_or(ParseError::OracleText);
+        let formats = Formats::new(&json["legalities"]).ok_or(ParseError::Legality);
+        let usd = json["prices"]["usd"].as_str().map(|p| p.parse::<f32>().expect("usd is invalid for a float"));
         Ok(Self {
             name: name?.to_owned(),
             id: id?.to_owned(),
@@ -51,7 +51,7 @@ impl Card {
             types: types?
                 .split_whitespace()
                 .filter(|t| *t != "—")
-                .map(|t| t.to_owned())
+                .map(std::borrow::ToOwned::to_owned)
                 .collect::<Vec<String>>(),
             oracle_text: oracle_text?.to_owned(),
             formats: formats?,
@@ -68,7 +68,7 @@ impl Card {
         types
     }
 }
-#[derive(Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct ImageUris {
     small: String,
     normal: String,
@@ -89,14 +89,14 @@ impl ImageUris {
         })
     }
 }
-#[derive(Debug)]
+#[derive(Serialize, Deserialize)]
 pub enum Legality {
     Legal,
     NotLegal,
     Restricted,
     Banned,
 }
-#[derive(Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct Formats {
     standard: Legality,
     future: Legality,

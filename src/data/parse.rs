@@ -1,7 +1,7 @@
-use crate::useful_structs::card::*;
+use crate::useful_structs::card::{Card, ParseError};
 use json::JsonValue;
-use std::collections::HashMap;
-pub(super) fn parse_cards(cards_data: JsonValue) {
+#[allow(clippy::needless_pass_by_value)]
+pub(super) fn parse_cards(cards_data: JsonValue) -> Vec<Card> {
     let mut cards = Vec::new();
     let mut err = Vec::new();
     for (i, card) in cards_data.members().enumerate() {
@@ -12,18 +12,6 @@ pub(super) fn parse_cards(cards_data: JsonValue) {
     }
     println!("{}", cards.len());
     println!("{}", err.len());
-    println!("{:?}", err[500]);
-    println!("{}", cards_data[err[500].1].pretty(9));
-    for er in err {
-        match er {
-            (CardParseError::NameErr, _) => {}
-            _ => {
-                println!("{:?}", er);
-                println!("{}", cards_data[er.1].pretty(9));
-                break;
-            }
-        }
-    }
-
     println!("finished");
+    cards
 }

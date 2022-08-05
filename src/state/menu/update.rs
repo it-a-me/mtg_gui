@@ -1,5 +1,4 @@
 use super::Menu;
-use crate::useful_structs::*;
 use macroquad::prelude::*;
 mod draw;
 impl Menu {
@@ -10,7 +9,7 @@ impl Menu {
 
         if is_key_released(KeyCode::J) || is_key_released(KeyCode::Down) {
             self.position += 1;
-            self.position = self.position % self.options.len();
+            self.position %= self.options.len();
         } else if macroquad::input::is_key_released(KeyCode::K) || is_key_released(KeyCode::Up) {
             match self.position {
                 0 => self.position = self.options.len() - 1,
@@ -33,40 +32,5 @@ impl Menu {
         }
         self.last_mouse_pos = mouse_pos;
         None
-    }
-}
-
-struct Rect {
-    x: f32,
-    y: f32,
-    width: f32,
-    height: f32,
-}
-impl Rect {
-    pub fn new(x: f32, y: f32, width: f32, height: f32) -> Self {
-        Self {
-            x,
-            y,
-            width,
-            height,
-        }
-    }
-
-    fn is_inside(&self, coords: Vec2) -> bool {
-        let r = coords.x > self.x
-            && coords.x < self.x + self.width
-            && coords.y > self.y
-            && coords.y < self.y + self.height;
-        if r {
-            println!(
-                "{}, {}",
-                r,
-                std::time::UNIX_EPOCH.elapsed().unwrap().as_nanos()
-            );
-        }
-        r
-    }
-    fn draw(&self, color: Color) {
-        draw_rectangle(self.x, self.y, self.width, self.height, color);
     }
 }

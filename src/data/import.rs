@@ -1,6 +1,6 @@
 use json::JsonValue;
-
-pub(super) fn fetch_data(data_dir: &std::path::PathBuf) -> Result<JsonValue, String> {
+#[allow(clippy::unnecessary_wraps)]
+pub(super) fn fetch_data(data_dir: &std::path::Path) -> Result<JsonValue, String> {
     Ok(json::parse(&String::from_utf8(std::fs::read(data_dir.join(".data").join("cards.json")).unwrap()).unwrap()).unwrap())
 //    let mut data_dir = data_dir.to_owned();
 //    data_dir.push(".data");
@@ -24,6 +24,7 @@ pub(super) fn fetch_data(data_dir: &std::path::PathBuf) -> Result<JsonValue, Str
 //    std::fs::write(data_dir.to_str().unwrap(), &card_json).expect("failed to write data");
 //    Ok(json::parse(card_json.as_ref()).expect("scryfall returned invalid card_json"))
 }
+#[allow(dead_code)]
 fn curl(client: &reqwest::blocking::Client, url: &str) -> Option<String> {
     for i in 1..=3 {
         println!("attempt {} of downloading {}", i, url);

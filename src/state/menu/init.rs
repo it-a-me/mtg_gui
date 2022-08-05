@@ -1,5 +1,6 @@
+                #![allow(clippy::cast_precision_loss)]
 use super::Menu;
-use crate::useful_structs::*;
+use crate::useful_structs::{Alignment, Text};
 use macroquad::prelude::*;
 impl Menu {
     pub fn new() -> Self {

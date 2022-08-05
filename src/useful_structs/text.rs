@@ -30,7 +30,7 @@ impl super::Text {
         (self.width, self.height) = (None, None);
     }
     pub fn draw_alt(&mut self, alt_color: Option<Color>, alt_size: Option<u16>) {
-        let mut alt_params = self.params.clone();
+        let mut alt_params = self.params;
         if let Some(alt_color) = alt_color {
             alt_params.color = alt_color;
         }
